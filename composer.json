@@ -1,0 +1,5 @@
+{
+    "require": {
+        "doctrine/instantiator": "~1.0.3"
+    }
+}
