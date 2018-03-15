@@ -1,77 +1,99 @@
 <?php
 
 
-class user
+class Form
 {
 
-    protected $name;
-    protected $age;
+    function input($Imass)
+    {
+        $Istr = "<input ";
+        $Istr .= $this->MassToStr($Imass);
+        $Istr .= ">";
+        return $Istr;
 
-    public function setName($Sname)
-    {$this->name = $Sname;}
-    public function getName()
-    {return $this->name;}
-    public function setAge($Sage)
-    {{$this->age = $Sage;}}
-    public function getAge()
-    {return $this->age;}
+    }
+    function submit($Smass)
+    {
+        $Sstr = "<input type=\"submit\" ";
+        $Sstr .= $this->MassToStr($Smass);
+        $Sstr .= ">";
+        return $Sstr;
+    }
 
+    function password($Pmass)
+    {
+        $Pstr = "<input type=\"password\" ";
+        $Pstr .= $this->MassToStr($Pmass);
+        $Pstr .= ">";
+        return $Pstr;
+    }
+
+    function textarea($Tmass)
+    {
+        $Tstr = "<textarea ";
+        $Tstr .= $this->MassToStr($Tmass);
+        $Tstr .= "</textarea>";
+        return $Tstr;
+    }
+
+    function open($Omass)
+    {
+        $Ostr = "<form ";
+        $Ostr .= $this->MassToStr($Omass);
+        $Ostr .= ">";
+        return $Ostr;
+    }
+
+    function close()
+    {
+        return "</form>";
+    }
+
+    private function MassToStr($Mass)
+    {
+        $str = '';
+
+        if (key($Mass) == 'placeholder')
+        {
+            foreach ($Mass as $key => $value) {
+                if ($key <> 'value'){
+                $str .= "$key=\"$value\" ";}
+                else {
+                    $str .= ">$value";
+                }
+            }
+        }else {
+            foreach ($Mass as $key => $value) {
+                $str .= "$key=\"$value\" ";
+            }
+        }
+        return $str;
+
+    }
 }
 
-class worker extends user
-{
-    private $salary;
 
-    public function getSalary()
-    {return $this->salary;}
-    public function setSalary($Ssalary)
-    {$this->salary = $Ssalary;}
+$form = new Form();
 
-}
+echo $form->open(['action'=>'index.php', 'method'=>'POST']);
+echo "<br/>";
 
-class Student extends user
-{
+echo $form->input(['type'=>'text', 'value'=>'!!!']);
+//Код выше выведет <input type="text" value="!!!">
+echo "<br/>";
 
-    private $stipend;
-    private $kurs;
+echo $form->password(['value'=>'!!!']);
+//Код выше выведет <input type="password" value="!!!">
+echo "<br/>";
 
-    public function setStipend($Sstipend)
-    {$this->stipend = $Sstipend;}
-    public function getStipend()
-    {return $this->stipend;}
-    public function setKurs($Skurs)
-    {{$this->kurs = $Skurs;}}
-    public function getKurs()
-    {return $this->kurs;}
+echo $form->textarea(['placeholder'=>'123', 'value'=>'!!!']);
+//Код выше выведет <textarea placeholder="123">!!!</textarea>
+echo "<br/>";
 
-}
+echo $form->submit(['value'=>'go']);
+//Код выше выведет <input type="submit" value="go">
+echo "<br/>";
 
-class Driver extends worker
-{
+echo $form->close();
+//Код выше выведет </form>
 
-    private $VStage;
-    private $VKat;
-
-    public function setVStage($SVStage)
-    {$this->VStage = $SVStage;}
-    public function getVStage()
-    {return $this->VStage;}
-    public function setVKat($SVKat)
-    {{$this->VKat = $SVKat;}}
-    public function getVKat()
-    {return $this->VKat;}
-}
-
-
-$work1 = new worker();
-$work1->setAge(25);
-$work1->setName('Иван');
-$work1->setSalary(1000);
-
-$work2 = new worker();
-$work2->setAge(26);
-$work2->setName('Вася');
-$work2->setSalary(2000);
-
-$res = $work1->getSalary() + $work2->getSalary();
-echo 'Сумма зарплат Васи и Ивана равна '.$res;
